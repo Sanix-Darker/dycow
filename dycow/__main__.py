@@ -31,7 +31,7 @@ class S(BaseHTTPRequestHandler):
             try:
                 q_params.append({"key": p.split("=")[0], "value": p.split("=")[1]})
             except Exception as es:
-                break
+                pass
 
         return q_params
 
@@ -46,12 +46,11 @@ class S(BaseHTTPRequestHandler):
                     and str(self.path).split("?")[0] == r["url_path"].split("?")[0]:
 
                 res = r["res"]
-                if body_params is not None:
+                if body_params is not None and bool(body_params) and r["type"] == "POST":
                     # it's the good link
                     for cmd in r["command"]:
-                        if bool(body_params):
-                            for pr in r["body_params"]:
-                                cmd = cmd.replace("#{}#".format(pr), body_params[pr]) if "#"+pr+"#" in cmd else ""
+                        for pr in r["body_params"]:
+                            cmd = cmd.replace("#{}#".format(pr), body_params[pr]) if "#"+pr+"#" in cmd else ""
                         system(cmd)
 
                     for pr in r["body_params"]:
