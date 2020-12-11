@@ -8,12 +8,7 @@ def grep(content: str, pattern: str) -> list:
     A dump grep method on a content lol
 
     """
-    results = []
-    for index, line in enumerate(content.split("\n")):
-        if search(pattern, line):
-            results.append(index)
-
-    return results
+    return [index if search(pattern, line) else None for index, line in enumerate(content.split("\n"))]
 
 
 def loop_bodies(k: int, url_path: str, lines: list, command: list, body_params: list, query_params: list):
@@ -35,8 +30,7 @@ def loop_bodies(k: int, url_path: str, lines: list, command: list, body_params: 
             body_params = lines[j].split("var:")[1].replace("\n", "").replace(" ", "").split(",")
 
         if "cmd:" in lines[j]:
-            cmd = lines[j].split("cmd:")[1].lstrip().rstrip()
-            command.append(cmd)
+            command.append(lines[j].split("cmd:")[1].lstrip().rstrip())
 
         if "res:" in lines[j]:
             res = lines[j].split("res:")[1].lstrip().rstrip()

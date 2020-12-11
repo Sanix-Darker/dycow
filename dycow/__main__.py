@@ -29,10 +29,7 @@ class S(BaseHTTPRequestHandler):
         q_params = []
         for p in params:
             try:
-                q_params.append({
-                        "key": p.split("=")[0],
-                        "value": p.split("=")[1]
-                })
+                q_params.append({"key": p.split("=")[0], "value": p.split("=")[1]})
             except Exception as es:
                 break
 
@@ -49,32 +46,25 @@ class S(BaseHTTPRequestHandler):
                     and str(self.path).split("?")[0] == r["url_path"].split("?")[0]:
 
                 res = r["res"]
-
                 if body_params is not None:
                     # it's the good link
                     for cmd in r["command"]:
                         if bool(body_params):
                             for pr in r["body_params"]:
-                                if "#" + pr + "#" in cmd:
-                                    cmd = cmd.replace("#{}#".format(pr), body_params[pr])
+                                cmd = cmd.replace("#{}#".format(pr), body_params[pr]) if "#"+pr+"#" in cmd else ""
                         system(cmd)
 
-                    if len(r["body_params"]) > 0:
-                        for pr in r["body_params"]:
-                            if "#" + pr + "#" in res:
-                                res = res.replace("#{}#".format(pr), body_params[pr])
+                    for pr in r["body_params"]:
+                        res = res.replace("#{}#".format(pr), body_params[pr]) if "#"+pr+"#" in res else res
                 else:
                     # it's the good link
                     for cmd in r["command"]:
-                        if len(q_params) > 0:
-                            for p in q_params:
-                                if "#" + p["key"] + "#" in cmd:
-                                    cmd = cmd.replace("#{}#".format(p["key"]), p["value"])
+                        for p in q_params:
+                            cmd = cmd.replace("#{}#".format(p["key"]), p["value"]) if "#"+p["key"]+"#" in cmd else ""
                         system(cmd)
 
                     for p in q_params:
-                        if "#" + p["key"] + "#" in res:
-                            res = res.replace("#{}#".format(p["key"]), p["value"])
+                        res = res.replace("#{}#".format(p["key"]), p["value"]) if "#"+p["key"]+"#" in res else res
 
         return res
 
@@ -82,7 +72,7 @@ class S(BaseHTTPRequestHandler):
         """
         The built in GET handler
         """
-        print("GET request,\nPath: {}\nHeaders:\n{}\n".format(str(self.path), str(self.headers)))
+        print("[-] GET request,\nPath: {}\nHeaders:\n{}\n".format(str(self.path), str(self.headers)))
 
         # We get query-params
         q_params = self.get_queries()
@@ -98,7 +88,7 @@ class S(BaseHTTPRequestHandler):
         """
         content_length = int(self.headers['Content-Length'])  # <--- Gets the size of data
         post_data = self.rfile.read(content_length)  # <--- Gets the data itself
-        print("POST request,\nPath: {}\nHeaders:\n{}\n\nBody:\n{}\n".format(str(self.path), str(self.headers),
+        print("[-] POST request,\nPath: {}\nHeaders:\n{}\n\nBody:\n{}\n".format(str(self.path), str(self.headers),
                                                                             post_data.decode('utf-8')))
         # We get query params
         q_params = self.get_queries()
@@ -115,8 +105,7 @@ def run(server_class=HTTPServer, handler_class=S, port=8080):
     """
     The runner function
     """
-    server_address = ('', port)
-    httpd = server_class(server_address, handler_class)
+    httpd = server_class(('', port), handler_class)
     print('[-] Starting dycow, port<{}>, conf-file<{}>...\n'.format(port, CONF_FILE))
     try:
         httpd.serve_forever()
@@ -151,9 +140,7 @@ if __name__ == '__main__':
                       "[x] Documentation online https://github.com/sanix-darker/dycow")
         else:
             print("[x] Error !\n[x] This file '{}' doesn't exist !".format(CONF_FILE))
-    elif len(argv) == 1:
-        help_center()
-    elif len(argv) == 2:
+    elif len(argv) <= 2:
         help_center()
     else:
         print("[x] Error !\n[x] Run : dw <port> <conf-file> \n"
