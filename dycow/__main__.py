@@ -131,7 +131,7 @@ def run(server_class=HTTPServer, handler_class=S, port=8080):
 
 
 def help_center():
-    print("[x] Help center !\n[x] Run : cs <port> <conf-file> \n"
+    print("[x] Help center !\n[x] Run : dw <port> <conf-file> \n"
           "[x] Documentation online https://github.com/sanix-darker/dycow")
 
 
@@ -149,7 +149,7 @@ if __name__ == '__main__':
                 # We start the server
                 run(port=int(argv[1]))
             else:
-                print("[x] Port Error !\n[x] Run : cs <port> <conf-file> \n"
+                print("[x] Port Error !\n[x] Run : dw <port> <conf-file> \n"
                       "[x] Documentation online https://github.com/sanix-darker/dycow")
         else:
             print("[x] Error !\n[x] This file '{}' doesn't exist !".format(CONF_FILE))
@@ -158,5 +158,5 @@ if __name__ == '__main__':
     elif len(argv) == 2:
         help_center()
     else:
-        print("[x] Error !\n[x] Run : cs <port> <conf-file> \n"
+        print("[x] Error !\n[x] Run : dw <port> <conf-file> \n"
               "[x] Documentation online https://github.com/sanix-darker/dycow")
