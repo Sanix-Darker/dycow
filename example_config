@@ -1,0 +1,10 @@
+- GET /
+res: Hello world
+
+- GET /callme?name&content
+cmd: echo 'Hello #name#, #content#'
+res: Thanks #name# !
+
+- POST /save
+var: name, content
+cmd: echo '#content#' > #name#.txt

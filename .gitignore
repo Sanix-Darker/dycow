@@ -1,0 +1,10 @@
+.vscode
+*__pycache__
+.history
+*cli*.txt
+.idea
+dist
+build
+MANIFEST
+*-info
+venv
