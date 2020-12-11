@@ -8,7 +8,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="dycow",
     version=VERSION,
-    scripts=['./scripts/dw'],
+    scripts=['./scripts/dw', './scripts/dycow'],
     author="Sanix-darker",
     author_email="s4nixd@gmail.com",
     description="A tiny web-server app with a configuration file, NO NEED TO CODE",
