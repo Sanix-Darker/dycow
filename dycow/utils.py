@@ -53,7 +53,7 @@ def loop_bodies(k: int, url_path: str, lines: list, command: list, body_params: 
 
 def parse_conf_file(conf_file: str) -> list:
     """
-
+    We parse the content of the configuration file
     """
     with open(conf_file, "r") as fil:
         conf_content = fil.read()
@@ -73,15 +73,13 @@ def parse_conf_file(conf_file: str) -> list:
                 command,
                 res) = loop_bodies(i, url_path, lines, command, body_params, query_params)
 
-                reqs.append(
-                    {
+                reqs.append({
                         "type": _type,
                         "url_path": url_path,
                         "query_params": query_params,
                         "body_params": body_params,
                         "command": command,
                         "res": res
-                    }
-                )
+                })
 
         return reqs

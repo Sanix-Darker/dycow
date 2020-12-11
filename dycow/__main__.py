@@ -29,12 +29,10 @@ class S(BaseHTTPRequestHandler):
         q_params = []
         for p in params:
             try:
-                q_params.append(
-                    {
+                q_params.append({
                         "key": p.split("=")[0],
                         "value": p.split("=")[1]
-                    }
-                )
+                })
             except Exception as es:
                 break
 

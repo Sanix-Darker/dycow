@@ -6,6 +6,16 @@ A tiny web-server app with a configuration file, NO NEED TO CODE
 
 This project is a small webserver that just have to get a port and a configuration file to perform preconfigurated commands.
 
+## Disclaimer
+
+This was a test-research project for a specific user-case on my raspberry-pi, therefore, i configurated only two methods (GET and POST)
+
+## Why use dycow
+
+- It's fast
+- Simple to configure, you just have to create a conf file to be ready to start
+- It's lightweight (The wheel is ~5Kb)
+
 ## Requirements
 
 - Python (3.x recommend)
@@ -19,9 +29,15 @@ pip install dycow
 
 ## How to use
 
-You have to :
+```shell
+$ dw -h
 
-- In a file named `conf`, we set our actions, for example :
+[x] Help center !
+[x] Run : dw <port> <conf-file> 
+[x] Documentation online https://github.com/sanix-darker/dycow
+```
+
+You have to create a file, for example `conf` and set actions :
 ```shell
 - GET /
 res: Hello world
@@ -46,12 +62,12 @@ Variables like `#content#` means, the content variable will be replace with the 
 - Then run the server application:
 ```shell
 # dw <port> <configuration-file>
-dw 3000 ./conf
+dw 3000 conf
 ```
 
 It will start a small server on port `3000` and following rules you specified in the configuration file.
 
-- You can access the POSTMAN-COLLECTION here : [API-DOC](https://documenter.getpostman.com/view/2696027/TVmV6ZS2)
+- You can access [API-DOC here](https://documenter.getpostman.com/view/2696027/TVmV6ZS2) .
 
 
 ## Author
