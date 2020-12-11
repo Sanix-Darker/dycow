@@ -1,12 +1,5 @@
 from dycow import (
-    path,
-    system,
-    urlparse,
-    json_loads,
-    BaseHTTPRequestHandler,
-    search,
-    argv,
-    HTTPServer
+    search
 )
 
 
@@ -23,7 +16,6 @@ def grep(content: str, pattern: str) -> list:
     return results
 
 
-
 def loop_bodies(k: int, url_path: str, lines: list, command: list, body_params: list, query_params: list):
     """
 
@@ -38,7 +30,7 @@ def loop_bodies(k: int, url_path: str, lines: list, command: list, body_params: 
     for j in range(k, len(lines)):
         if len(lines[j]) <= 2:
             break
-        
+
         if "var:" in lines[j]:
             body_params = lines[j].split("var:")[1].replace("\n", "").replace(" ", "").split(",")
 
@@ -50,6 +42,7 @@ def loop_bodies(k: int, url_path: str, lines: list, command: list, body_params: 
             res = lines[j].split("res:")[1].lstrip().rstrip()
 
     return query_params, body_params, command, res
+
 
 def parse_conf_file(conf_file: str) -> list:
     """
@@ -69,17 +62,17 @@ def parse_conf_file(conf_file: str) -> list:
                 query_params, body_params, command = [], [], []
 
                 (query_params,
-                body_params,
-                command,
-                res) = loop_bodies(i, url_path, lines, command, body_params, query_params)
+                 body_params,
+                 command,
+                 res) = loop_bodies(i, url_path, lines, command, body_params, query_params)
 
                 reqs.append({
-                        "type": _type,
-                        "url_path": url_path,
-                        "query_params": query_params,
-                        "body_params": body_params,
-                        "command": command,
-                        "res": res
+                    "type": _type,
+                    "url_path": url_path,
+                    "query_params": query_params,
+                    "body_params": body_params,
+                    "command": command,
+                    "res": res
                 })
 
         return reqs
