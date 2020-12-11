@@ -14,7 +14,7 @@ setuptools.setup(
     description="A tiny web-server app with a configuration file, NO NEED TO CODE",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/sanix-darker/b4sh",
+    url="https://github.com/sanix-darker/dycow",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
