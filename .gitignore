@@ -8,3 +8,4 @@ build
 MANIFEST
 *-info
 venv
+*.pyc

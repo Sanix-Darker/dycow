@@ -1,6 +1,10 @@
 - GET /
 res: Hello world
 
+- GET /list
+cmd: ls -l
+res: #cmd#
+
 - GET /callme?name&content
 cmd: echo 'Hello #name#, #content#'
 res: Thanks #name# !

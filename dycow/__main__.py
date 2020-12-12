@@ -47,20 +47,32 @@ class S(BaseHTTPRequestHandler):
 
                 res = r["res"]
                 if body_params is not None and bool(body_params) and r["type"] == "POST":
+                    system("rm -rf ./out && touch out")
                     # it's the good link
                     for cmd in r["command"]:
                         for pr in r["body_params"]:
                             cmd = cmd.replace("#{}#".format(pr), body_params[pr]) if "#"+pr+"#" in cmd else ""
-                        system(cmd)
+                        system(cmd + " >> out")
+
+                    with open("./out", "r") as out_:
+                        out_content = out_.read()
+                        res = res.replace("#cmd#", out_content)
+                        system("rm -rf ./out")
 
                     for pr in r["body_params"]:
                         res = res.replace("#{}#".format(pr), body_params[pr]) if "#"+pr+"#" in res else res
                 else:
+                    system("rm -rf ./out && touch out")
                     # it's the good link
                     for cmd in r["command"]:
                         for p in q_params:
                             cmd = cmd.replace("#{}#".format(p["key"]), p["value"]) if "#"+p["key"]+"#" in cmd else ""
-                        system(cmd)
+                        system(cmd + " >> out")
+
+                    with open("./out", "r") as out_:
+                        out_content = out_.read()
+                        res = res.replace("#cmd#", out_content)
+                        system("rm -rf ./out")
 
                     for p in q_params:
                         res = res.replace("#{}#".format(p["key"]), p["value"]) if "#"+p["key"]+"#" in res else res
