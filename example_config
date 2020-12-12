@@ -1,14 +1,21 @@
+# A simple req/res with a static message
 - GET /
 res: Hello world
 
+# This endpoint will run a command
+# and return the output as result
 - GET /list
 cmd: ls -l
 res: #cmd#
 
-- GET /callme?name&content
-cmd: echo 'Hello #name#, #content#'
+# This endpoint will echo the name variable
+# and return a message with it'Thanks darker'
+- GET /callme?name
+cmd: echo 'Hello #name#!'
 res: Thanks #name# !
 
+# This endpoint will write in a text file
+# with the variable #name# the #content#
 - POST /save
 var: name, content
 cmd: echo '#content#' > #name#.txt

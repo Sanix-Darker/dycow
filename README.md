@@ -2,6 +2,8 @@
 
 A tiny web-server app with a configuration file, NO NEED TO CODE
 
+![dycow-demo](https://raw.githubusercontent.com/Sanix-Darker/dycow/master/img/dycow.png)
+
 ## Introduction
 
 This project is a small webserver that just have to get a port and a configuration file to perform preconfigurated commands.
@@ -42,6 +44,10 @@ You have to create a file, for example `conf` and set actions :
 - GET /
 res: Hello world
 
+- GET /list
+cmd: ls -l
+res: #cmd#
+
 - GET /callme?name&content
 cmd: echo 'Hello #name#, #content#'
 res: Thanks #name# !
@@ -49,7 +55,6 @@ res: Thanks #name# !
 - POST /save
 var: name, content
 cmd: echo '#content#' > #name#.txt
-
 ```
 
 `- GET`(or `- POST`) is the type of the request, just after it the endPoint (`/save`, `/callme?name&content`). \
