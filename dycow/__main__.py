@@ -46,8 +46,9 @@ class S(BaseHTTPRequestHandler):
                     and str(self.path).split("?")[0] == r["url_path"].split("?")[0]:
 
                 res = r["res"]
+                # To create / empty the file
+                open('./out', 'w').close()
                 if body_params is not None and bool(body_params) and r["type"] == "POST":
-                    system("rm -rf ./out && touch out")
                     # it's the good link
                     for cmd in r["command"]:
                         for pr in r["body_params"]:
@@ -55,14 +56,11 @@ class S(BaseHTTPRequestHandler):
                         system(cmd + " >> out")
 
                     with open("./out", "r") as out_:
-                        out_content = out_.read()
-                        res = res.replace("#cmd#", out_content)
-                        system("rm -rf ./out")
+                        res = res.replace("#cmd#", out_.read())
 
                     for pr in r["body_params"]:
                         res = res.replace("#{}#".format(pr), body_params[pr]) if "#"+pr+"#" in res else res
                 else:
-                    system("rm -rf ./out && touch out")
                     # it's the good link
                     for cmd in r["command"]:
                         for p in q_params:
@@ -70,9 +68,7 @@ class S(BaseHTTPRequestHandler):
                         system(cmd + " >> out")
 
                     with open("./out", "r") as out_:
-                        out_content = out_.read()
-                        res = res.replace("#cmd#", out_content)
-                        system("rm -rf ./out")
+                        res = res.replace("#cmd#", out_.read())
 
                     for p in q_params:
                         res = res.replace("#{}#".format(p["key"]), p["value"]) if "#"+p["key"]+"#" in res else res
