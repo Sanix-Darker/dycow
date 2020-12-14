@@ -44,29 +44,19 @@ def parse_conf_file(conf_file: str) -> list:
     """
     with open(conf_file, "r") as fil:
         conf_content = fil.read()
-        with open(conf_file, "r") as fil2:
-            lines = fil2.readlines()
+        lines = conf_content.split("\n")
 
         reqs = []
         for i in range(0, len(lines)):
             if i in grep(conf_content, "GET") or i in grep(conf_content, "POST"):
-                _type = lines[i].split(" ")[1].replace("\n", "")
                 url_path = lines[i].split(" ")[2].replace("\n", "")
-                res = "request sent."
-                query_params, body_params, command = [], [], []
 
                 (query_params,
                  body_params,
                  command,
-                 res) = loop_bodies(i, url_path, lines, command, body_params, query_params)
+                 res) = loop_bodies(i, url_path, lines, [], [], [])
 
-                reqs.append({
-                    "type": _type,
-                    "url_path": url_path,
-                    "query_params": query_params,
-                    "body_params": body_params,
-                    "command": command,
-                    "res": res
-                })
+                reqs.append({"type": lines[i].split(" ")[1].replace("\n", ""), "url_path": url_path,
+                             "query_params": query_params, "body_params": body_params, "command": command, "res": res})
 
         return reqs

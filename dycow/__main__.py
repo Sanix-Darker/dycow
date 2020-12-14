@@ -25,9 +25,8 @@ class S(BaseHTTPRequestHandler):
         Getting query params
 
         """
-        params = urlparse(self.path).query.split("&")
         q_params = []
-        for p in params:
+        for p in urlparse(self.path).query.split("&"):
             try:
                 q_params.append({"key": p.split("=")[0], "value": p.split("=")[1]})
             except Exception as es:
@@ -35,7 +34,7 @@ class S(BaseHTTPRequestHandler):
 
         return q_params
 
-    def execute_return_res(self, q_params, body_params=None):
+    def execute_return_res(self, q_params: list, body_params=None):
         """
         This method will execute commands and return appropriate response
 
@@ -52,26 +51,27 @@ class S(BaseHTTPRequestHandler):
                     # it's the good link
                     for cmd in r["command"]:
                         for pr in r["body_params"]:
-                            cmd = cmd.replace("#{}#".format(pr), body_params[pr]) if "#"+pr+"#" in cmd else ""
+                            cmd = cmd.replace("#{}#".format(pr), body_params[pr]) if "#" + pr + "#" in cmd else ""
                         system(cmd + " >> out")
 
                     with open("./out", "r") as out_:
                         res = res.replace("#cmd#", out_.read())
 
                     for pr in r["body_params"]:
-                        res = res.replace("#{}#".format(pr), body_params[pr]) if "#"+pr+"#" in res else res
+                        res = res.replace("#{}#".format(pr), body_params[pr]) if "#" + pr + "#" in res else res
                 else:
                     # it's the good link
                     for cmd in r["command"]:
                         for p in q_params:
-                            cmd = cmd.replace("#{}#".format(p["key"]), p["value"]) if "#"+p["key"]+"#" in cmd else ""
+                            cmd = cmd.replace("#{}#".format(p["key"]), p["value"]) if "#" + p[
+                                "key"] + "#" in cmd else ""
                         system(cmd + " >> out")
 
                     with open("./out", "r") as out_:
                         res = res.replace("#cmd#", out_.read())
 
                     for p in q_params:
-                        res = res.replace("#{}#".format(p["key"]), p["value"]) if "#"+p["key"]+"#" in res else res
+                        res = res.replace("#{}#".format(p["key"]), p["value"]) if "#" + p["key"] + "#" in res else res
 
         return res
 
@@ -96,7 +96,7 @@ class S(BaseHTTPRequestHandler):
         content_length = int(self.headers['Content-Length'])  # <--- Gets the size of data
         post_data = self.rfile.read(content_length)  # <--- Gets the data itself
         print("[-] POST request,\nPath: {}\nHeaders:\n{}\n\nBody:\n{}\n".format(str(self.path), str(self.headers),
-                                                                            post_data.decode('utf-8')))
+                                                                                post_data.decode('utf-8')))
         # We get query params
         q_params = self.get_queries()
         # We get body params
@@ -112,8 +112,9 @@ def run(server_class=HTTPServer, handler_class=S, port=8080):
     """
     The runner function
     """
+    print("- " * 30)
     httpd = server_class(('', port), handler_class)
-    print('[-] Starting dycow, port<{}>, conf-file<{}>...\n'.format(port, CONF_FILE))
+    print('[-] Starting dycow instance...\n[-] On port<{}>, conf<{}>...\n'.format(port, CONF_FILE))
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
@@ -137,7 +138,6 @@ if __name__ == '__main__':
         if path.exists(CONF_FILE):
             # We check if the port is a numeric value
             if argv[1].isnumeric():
-                print("- " * 30)
                 # We parse and get requests as dict from the configuration file
                 REQS = parse_conf_file(CONF_FILE)
                 # We start the server
