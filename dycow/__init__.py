@@ -5,3 +5,4 @@ from json import loads as json_loads
 
 from urllib.parse import urlparse
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from dycow.settings import VERSION

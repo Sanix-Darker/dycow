@@ -74,6 +74,19 @@ It will start a small server on port `3000` and following rules you specified in
 
 - You can access [API-DOC here](https://documenter.getpostman.com/view/2696027/TVmV6ZS2) .
 
+## Tests
+
+To run rest-api tests, i made a bash file in `./tests` directory.\
+you just have to run `bash ./tests/rest-api-test.sh`
+```
+$ bash ./tests/rest-api-test.sh 
+[-] Running Endpoints tests on dycow.
+[✓] GET / passed.
+[✓] GET /list passed.
+[✓] GET /callme?name=darker passed.
+[✓] POST /save passed.
+[-] Stopping tests Endpoints on dycow.
+```
 
 ## Author
 

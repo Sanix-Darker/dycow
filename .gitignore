@@ -9,3 +9,5 @@ MANIFEST
 *-info
 venv
 *.pyc
+out
+text.txt
