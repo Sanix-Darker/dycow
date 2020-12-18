@@ -85,6 +85,10 @@ $ bash ./tests/rest-api-test.sh
 [✓] GET /list passed.
 [✓] GET /callme?name=darker passed.
 [✓] POST /save passed.
+- - -
+[-] Tests run :
+[-] 4 tests succeed !
+[-] 0 tests failed !
 [-] Stopping tests Endpoints on dycow.
 ```
 

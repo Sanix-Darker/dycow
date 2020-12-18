@@ -80,33 +80,17 @@ class S(BaseHTTPRequestHandler):
         """
         The built in GET handler
         """
-        print("[-] GET request,\nPath: {}\nHeaders:\n{}\n".format(str(self.path), str(self.headers)))
-
-        # We get query-params
-        q_params = self.get_queries()
-        # We return the result
-        res = self.execute_return_res(q_params)
-
         self._set_response()
-        self.wfile.write("{}".format(res).encode('utf-8'))
+        self.wfile.write("{}".format(self.execute_return_res(self.get_queries())).encode('utf-8'))
 
     def do_POST(self):
         """
         The built in POST handler
         """
-        content_length = int(self.headers['Content-Length'])  # <--- Gets the size of data
-        post_data = self.rfile.read(content_length)  # <--- Gets the data itself
-        print("[-] POST request,\nPath: {}\nHeaders:\n{}\n\nBody:\n{}\n".format(str(self.path), str(self.headers),
-                                                                                post_data.decode('utf-8')))
-        # We get query params
-        q_params = self.get_queries()
-        # We get body params
-        body_params = json_loads(post_data.decode('utf-8'))
-        # We return the return response
-        res = self.execute_return_res(q_params, body_params)
-
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length)
         self._set_response()
-        self.wfile.write("{}".format(res).encode('utf-8'))
+        self.wfile.write("{}".format(self.execute_return_res(self.get_queries(), json_loads(post_data.decode('utf-8')))).encode('utf-8'))
 
 
 def run(server_class=HTTPServer, handler_class=S, port=8080):
