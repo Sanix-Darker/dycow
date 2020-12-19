@@ -10,4 +10,4 @@ MANIFEST
 venv
 *.pyc
 out
-text.txt
+test.txt

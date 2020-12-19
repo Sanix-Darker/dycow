@@ -1,6 +1,4 @@
-from dycow import (
-    search
-)
+from dycow import search
 
 
 def grep(content: str, pattern: str) -> list:
@@ -13,7 +11,10 @@ def grep(content: str, pattern: str) -> list:
 
 def loop_bodies(k: int, url_path: str, lines: list, command: list, body_params: list, query_params: list):
     """
-
+    We loop lines here to extract :
+    - query params
+    - command to execute
+    - response to return
     """
     res = "request sent."
 
@@ -51,10 +52,7 @@ def parse_conf_file(conf_file: str) -> list:
             if i in grep(conf_content, "GET") or i in grep(conf_content, "POST"):
                 url_path = lines[i].split(" ")[2].replace("\n", "")
 
-                (query_params,
-                 body_params,
-                 command,
-                 res) = loop_bodies(i, url_path, lines, [], [], [])
+                (query_params, body_params, command, res) = loop_bodies(i, url_path, lines, [], [], [])
 
                 reqs.append({"type": lines[i].split(" ")[1].replace("\n", ""), "url_path": url_path,
                              "query_params": query_params, "body_params": body_params, "command": command, "res": res})

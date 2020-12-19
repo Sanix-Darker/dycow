@@ -35,6 +35,14 @@ class S(BaseHTTPRequestHandler):
 
         return q_params
 
+    def cmd_output_to_res(self, res):
+        """
+
+        """
+        with open("./out", "r") as out_:
+            res = res.replace("#cmd#", out_.read())
+        return res
+
     def execute_return_res(self, q_params: list, body_params=None):
         """
         This method will execute commands and return appropriate response
@@ -52,24 +60,21 @@ class S(BaseHTTPRequestHandler):
                     # it's the good link
                     for cmd in r["command"]:
                         for pr in r["body_params"]:
-                            cmd = cmd.replace("#{}#".format(pr), body_params[pr]) if "#" + pr + "#" in cmd else ""
+                            cmd = cmd.replace("#{}#".format(pr), body_params[pr]) if "#"+pr+"#" in cmd else ""
                         system(cmd + " >> out")
 
-                    with open("./out", "r") as out_:
-                        res = res.replace("#cmd#", out_.read())
+                    res = self.cmd_output_to_res(res)
 
-                    for pr in r["body_params"]:
-                        res = res.replace("#{}#".format(pr), body_params[pr]) if "#" + pr + "#" in res else res
+                    for p in r["body_params"]:
+                        res = res.replace("#{}#".format(p), body_params[p]) if "#"+p+"#" in res else res
                 else:
                     # it's the good link
                     for cmd in r["command"]:
                         for p in q_params:
-                            cmd = cmd.replace("#{}#".format(p["key"]), p["value"]) if "#" + p[
-                                "key"] + "#" in cmd else ""
+                            cmd = cmd.replace("#{}#".format(p["key"]), p["value"]) if "#"+p["key"]+"#" in cmd else ""
                         system(cmd + " >> out")
 
-                    with open("./out", "r") as out_:
-                        res = res.replace("#cmd#", out_.read())
+                    res = self.cmd_output_to_res(res)
 
                     for p in q_params:
                         res = res.replace("#{}#".format(p["key"]), p["value"]) if "#" + p["key"] + "#" in res else res
@@ -87,10 +92,13 @@ class S(BaseHTTPRequestHandler):
         """
         The built in POST handler
         """
-        content_length = int(self.headers['Content-Length'])
-        post_data = self.rfile.read(content_length)
         self._set_response()
-        self.wfile.write("{}".format(self.execute_return_res(self.get_queries(), json_loads(post_data.decode('utf-8')))).encode('utf-8'))
+        self.wfile.write("{}".format(
+            self.execute_return_res(
+                self.get_queries(),
+                json_loads(self.rfile.read(int(self.headers['Content-Length'])).decode('utf-8'))
+            )
+        ).encode('utf-8'))
 
 
 def run(server_class=HTTPServer, handler_class=S, port=8080):
