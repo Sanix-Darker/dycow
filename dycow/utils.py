@@ -1,4 +1,4 @@
-from dycow import search
+from dycow import search, traceback, stdout
 
 
 def grep(content: str, pattern: str) -> list:
@@ -7,6 +7,13 @@ def grep(content: str, pattern: str) -> list:
 
     """
     return [index if search(pattern, line) else None for index, line in enumerate(content.split("\n"))]
+
+
+def get_trace():
+    print("[x] Exception in code:")
+    print("-" * 60)
+    traceback.print_exc(file=stdout)
+    print("-" * 60)
 
 
 def loop_bodies(k: int, url_path: str, lines: list, command: list, body_params: list, query_params: list):
@@ -48,13 +55,20 @@ def parse_conf_file(conf_file: str) -> list:
         lines = conf_content.split("\n")
 
         reqs = []
-        for i in range(0, len(lines)):
-            if i in grep(conf_content, "GET") or i in grep(conf_content, "POST"):
-                url_path = lines[i].split(" ")[2].replace("\n", "")
+        try:
+            for i in range(0, len(lines)):
+                if i in grep(conf_content, "GET") or i in grep(conf_content, "POST"):
+                    url_path = lines[i].split(" ")[2].replace("\n", "")
 
-                (query_params, body_params, command, res) = loop_bodies(i, url_path, lines, [], [], [])
+                    (query_params, body_params, command, res) = loop_bodies(i, url_path, lines, [], [], [])
 
-                reqs.append({"type": lines[i].split(" ")[1].replace("\n", ""), "url_path": url_path,
-                             "query_params": query_params, "body_params": body_params, "command": command, "res": res})
+                    reqs.append({"type": lines[i].split(" ")[1].replace("\n", ""), "url_path": url_path,
+                                 "query_params": query_params, "body_params": body_params, "command": command,
+                                 "res": res})
+        except Exception as es:
+            print("[x] There is an error with your configuration file !")
+            print("[x] Please check the documentation !")
+            get_trace()
+            exit()
 
         return reqs
