@@ -38,28 +38,15 @@ pip install dycow
 ```shell
 $ dw -h
 
-[x] Help center !
+[-] dycow v0.0.9.7.
+[-] Help center !
 [x] Run : dw <port> <conf-file> 
 [x] Documentation online https://github.com/sanix-darker/dycow
 ```
 
-You have to create a file, for example `conf` and set actions :
-```shell
-- GET /
-res: Hello world
+You have to create a file, for example `conf` and set actions, for example :
 
-- GET /list
-cmd: ls -l
-res: #cmd#
-
-- GET /callme?name&content
-cmd: echo 'Hello #name#, #content#'
-res: Thanks #name# !
-
-- POST /save
-var: name, content
-cmd: echo '#content#' > #name#.txt
-```
+![dycow-demo](https://raw.githubusercontent.com/Sanix-Darker/dycow/master/img/conf.png)
 
 `- GET`(or `- POST`) is the type of the request, just after it the endPoint (`/save`, `/callme?name&content`). \
 `cmd` is the command line that will be executed on a request. \
