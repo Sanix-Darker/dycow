@@ -24,7 +24,6 @@ class S(BaseHTTPRequestHandler):
     def get_queries(self):
         """
         Getting query params
-
         """
         q_params = []
         for p in urlparse(self.path).query.split("&"):
@@ -37,7 +36,6 @@ class S(BaseHTTPRequestHandler):
 
     def cmd_output_to_res(self, res):
         """
-
         """
         with open("./out", "r") as out_:
             res = res.replace("#cmd#", out_.read())
@@ -46,7 +44,6 @@ class S(BaseHTTPRequestHandler):
     def execute_return_res(self, q_params: list, body_params=None):
         """
         This method will execute commands and return appropriate response
-
         """
         res = ""
         for r in REQS:
@@ -124,7 +121,6 @@ def help_center():
 
 
 if __name__ == '__main__':
-
     if len(argv) == 3:
         CONF_FILE = argv[2]
         # We check if a config file have been provide
@@ -139,5 +135,6 @@ if __name__ == '__main__':
                 help_center()
         else:
             print("[x] Error !\n[x] This file '{}' doesn't exist !".format(CONF_FILE))
+            help_center()
     else:
         help_center()

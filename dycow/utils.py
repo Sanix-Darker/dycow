@@ -16,7 +16,7 @@ def get_trace():
     print("-" * 60)
 
 
-def loop_bodies(k: int, url_path: str, lines: list, command: list, body_params: list, query_params: list):
+def loop_bodies(k: int, url_path: str, lines: list):
     """
     We loop lines here to extract :
     - query params
@@ -24,7 +24,7 @@ def loop_bodies(k: int, url_path: str, lines: list, command: list, body_params: 
     - response to return
     """
     res = "request sent."
-
+    command, body_params, query_params = [], [], []
     # There are some query params
     if "?" in url_path:
         for p in url_path.split("?")[1].split("&"):
@@ -60,7 +60,7 @@ def parse_conf_file(conf_file: str) -> list:
                 if i in grep(conf_content, "GET") or i in grep(conf_content, "POST"):
                     url_path = lines[i].split(" ")[2].replace("\n", "")
 
-                    (query_params, body_params, command, res) = loop_bodies(i, url_path, lines, [], [], [])
+                    (query_params, body_params, command, res) = loop_bodies(i, url_path, lines)
 
                     reqs.append({"type": lines[i].split(" ")[1].replace("\n", ""), "url_path": url_path,
                                  "query_params": query_params, "body_params": body_params, "command": command,

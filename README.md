@@ -1,5 +1,9 @@
 # Dynamic Command WebServer (dycow)
 
+[![Downloads](https://pepy.tech/badge/dycow)](https://pepy.tech/project/dycow)
+[![PyPI version](https://badge.fury.io/py/dycow.svg)](https://badge.fury.io/py/dycow)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A tiny web-server app with a configuration file, NO NEED TO CODE
 
 ![dycow-demo](https://raw.githubusercontent.com/Sanix-Darker/dycow/master/img/dycow.png)
