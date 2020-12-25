@@ -23,27 +23,32 @@ def loop_bodies(k: int, url_path: str, lines: list):
     - command to execute
     - response to return
     """
-    res = "request sent."
-    command, body_params, query_params = [], [], []
+
+    extracted_params = {
+        "command": [],
+        "body_params": [],
+        "query_params": [],
+        "res": "request sent."
+    }
     # There are some query params
     if "?" in url_path:
         for p in url_path.split("?")[1].split("&"):
-            query_params.append(p)
+            extracted_params["query_params"].append(p)
 
     for j in range(k, len(lines)):
         if len(lines[j]) <= 2:
             break
 
         if "var:" in lines[j]:
-            body_params = lines[j].split("var:")[1].replace("\n", "").replace(" ", "").split(",")
+            extracted_params["body_params"] = lines[j].split("var:")[1].replace("\n", "").replace(" ", "").split(",")
 
         if "cmd:" in lines[j]:
-            command.append(lines[j].split("cmd:")[1].lstrip().rstrip())
+            extracted_params["command"].append(lines[j].split("cmd:")[1].lstrip().rstrip())
 
         if "res:" in lines[j]:
-            res = lines[j].split("res:")[1].lstrip().rstrip()
+            extracted_params["res"] = lines[j].split("res:")[1].lstrip().rstrip()
 
-    return query_params, body_params, command, res
+    return extracted_params
 
 
 def parse_conf_file(conf_file: str) -> list:
@@ -60,11 +65,14 @@ def parse_conf_file(conf_file: str) -> list:
                 if i in grep(conf_content, "GET") or i in grep(conf_content, "POST"):
                     url_path = lines[i].split(" ")[2].replace("\n", "")
 
-                    (query_params, body_params, command, res) = loop_bodies(i, url_path, lines)
+                    extracted_params = loop_bodies(i, url_path, lines)
 
-                    reqs.append({"type": lines[i].split(" ")[1].replace("\n", ""), "url_path": url_path,
-                                 "query_params": query_params, "body_params": body_params, "command": command,
-                                 "res": res})
+                    reqs.append({"type": lines[i].split(" ")[1].replace("\n", ""),
+                                 "url_path": url_path,
+                                 "query_params": extracted_params["query_params"],
+                                 "body_params": extracted_params["body_params"],
+                                 "command": extracted_params["command"],
+                                 "res": extracted_params["res"]})
         except Exception as es:
             print("[x] There is an error with your configuration file !")
             print("[x] Please check the documentation !")
@@ -72,3 +80,10 @@ def parse_conf_file(conf_file: str) -> list:
             exit()
 
         return reqs
+
+
+def cmd_output_to_res(res):
+    """
+    """
+    with open("./out", "r") as out_:
+        return res.replace("#cmd#", out_.read())

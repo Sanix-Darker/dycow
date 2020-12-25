@@ -9,7 +9,7 @@ from dycow import (
     HTTPServer,
     VERSION
 )
-from dycow.utils import parse_conf_file
+from dycow.utils import parse_conf_file, cmd_output_to_res
 
 CONF_FILE = ""
 REQS = []
@@ -34,16 +34,10 @@ class S(BaseHTTPRequestHandler):
 
         return q_params
 
-    def cmd_output_to_res(self, res):
-        """
-        """
-        with open("./out", "r") as out_:
-            res = res.replace("#cmd#", out_.read())
-        return res
-
     def execute_return_res(self, q_params: list, body_params=None):
         """
         This method will execute commands and return appropriate response
+
         """
         res = ""
         for r in REQS:
@@ -60,7 +54,7 @@ class S(BaseHTTPRequestHandler):
                             cmd = cmd.replace("#{}#".format(pr), body_params[pr]) if "#"+pr+"#" in cmd else ""
                         system(cmd + " >> out")
 
-                    res = self.cmd_output_to_res(res)
+                    res = cmd_output_to_res(res)
 
                     for p in r["body_params"]:
                         res = res.replace("#{}#".format(p), body_params[p]) if "#"+p+"#" in res else res
@@ -71,7 +65,7 @@ class S(BaseHTTPRequestHandler):
                             cmd = cmd.replace("#{}#".format(p["key"]), p["value"]) if "#"+p["key"]+"#" in cmd else ""
                         system(cmd + " >> out")
 
-                    res = self.cmd_output_to_res(res)
+                    res = cmd_output_to_res(res)
 
                     for p in q_params:
                         res = res.replace("#{}#".format(p["key"]), p["value"]) if "#" + p["key"] + "#" in res else res
@@ -93,7 +87,11 @@ class S(BaseHTTPRequestHandler):
         self.wfile.write("{}".format(
             self.execute_return_res(
                 self.get_queries(),
-                json_loads(self.rfile.read(int(self.headers['Content-Length'])).decode('utf-8'))
+                json_loads(
+                    self.rfile.read(
+                        int(self.headers['Content-Length'])
+                    ).decode('utf-8')
+                )
             )
         ).encode('utf-8'))
 
