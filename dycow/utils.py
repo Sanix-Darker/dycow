@@ -1,4 +1,8 @@
-from dycow import search, traceback, stdout
+"""
+utils.py
+some common functions utils
+"""
+from dycow import search, stdout, traceback
 
 
 def grep(content: str, pattern: str) -> list:
@@ -6,7 +10,10 @@ def grep(content: str, pattern: str) -> list:
     A dump grep method on a content lol
 
     """
-    return [index if search(pattern, line) else None for index, line in enumerate(content.split("\n"))]
+    return [
+        index if search(pattern, line) else None
+        for index, line in enumerate(content.split("\n"))
+    ]
 
 
 def get_trace():
@@ -16,7 +23,7 @@ def get_trace():
     print("-" * 60)
 
 
-def loop_bodies(k: int, url_path: str, lines: list):
+def loop_bodies(k: int, url_path: str, lines: list) -> dict:
     """
     We loop lines here to extract :
     - query params
@@ -28,7 +35,7 @@ def loop_bodies(k: int, url_path: str, lines: list):
         "command": [],
         "body_params": [],
         "query_params": [],
-        "res": "request sent."
+        "res": "request sent.",
     }
     # There are some query params
     if "?" in url_path:
@@ -40,10 +47,14 @@ def loop_bodies(k: int, url_path: str, lines: list):
             break
 
         if "var:" in lines[j]:
-            extracted_params["body_params"] = lines[j].split("var:")[1].replace("\n", "").replace(" ", "").split(",")
+            extracted_params["body_params"] = (
+                lines[j].split("var:")[1].replace("\n", "").replace(" ", "").split(",")
+            )
 
         if "cmd:" in lines[j]:
-            extracted_params["command"].append(lines[j].split("cmd:")[1].lstrip().rstrip())
+            extracted_params["command"].append(
+                lines[j].split("cmd:")[1].lstrip().rstrip()
+            )
 
         if "res:" in lines[j]:
             extracted_params["res"] = lines[j].split("res:")[1].lstrip().rstrip()
@@ -67,12 +78,16 @@ def parse_conf_file(conf_file: str) -> list:
 
                     extracted_params = loop_bodies(i, url_path, lines)
 
-                    reqs.append({"type": lines[i].split(" ")[1].replace("\n", ""),
-                                 "url_path": url_path,
-                                 "query_params": extracted_params["query_params"],
-                                 "body_params": extracted_params["body_params"],
-                                 "command": extracted_params["command"],
-                                 "res": extracted_params["res"]})
+                    reqs.append(
+                        {
+                            "type": lines[i].split(" ")[1].replace("\n", ""),
+                            "url_path": url_path,
+                            "query_params": extracted_params["query_params"],
+                            "body_params": extracted_params["body_params"],
+                            "command": extracted_params["command"],
+                            "res": extracted_params["res"],
+                        }
+                    )
         except Exception as es:
             print("[x] There is an error with your configuration file !")
             print("[x] Please check the documentation !")
@@ -82,8 +97,6 @@ def parse_conf_file(conf_file: str) -> list:
         return reqs
 
 
-def cmd_output_to_res(res):
-    """
-    """
+def cmd_output_to_res(res) -> str:
     with open("./out", "r") as out_:
         return res.replace("#cmd#", out_.read())
